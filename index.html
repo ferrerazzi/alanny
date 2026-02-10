@@ -7,8 +7,7 @@
 
 <style>
 :root { --blue:#87CEEB; --bg:#050505; }
-
-* { margin:0; padding:0; box-sizing:border-box; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
 html,body{
   width:100%;
@@ -26,7 +25,7 @@ html,body{
   align-items:center;
 }
 
-/* SPLASH */
+/* Splash */
 #splash{
   position:fixed;
   inset:0;
@@ -60,7 +59,7 @@ html,body{
   box-shadow:0 0 15px rgba(135,206,235,.4);
 }
 
-/* MAIN */
+/* Main */
 #main{
   display:none;
   flex-direction:column;
@@ -83,14 +82,13 @@ html,body{
   text-align:center;
 }
 
-.nome-ela{ color:var(--blue); font-size:1.2rem; font-weight:bold; }
-
-#timer{ color:var(--blue); font-size:1.4rem; font-weight:bold; }
+.nome-ela{color:var(--blue);font-size:1.2rem;font-weight:bold;}
+#timer{color:var(--blue);font-size:1.4rem;font-weight:bold;}
 
 .gallery{
   width:100%;
   max-width:340px;
-  height:430px;
+  height:420px;
   position:relative;
   border-radius:20px;
   overflow:hidden;
@@ -107,8 +105,7 @@ html,body{
   opacity:0;
   transition:1s;
 }
-
-.gallery img.active{ opacity:1; }
+.gallery img.active{opacity:1;}
 
 #btn-ask{
   margin-top:15px;
@@ -120,7 +117,7 @@ html,body{
   cursor:pointer;
 }
 
-/* HEARTS */
+/* Hearts */
 .heart{
   position:fixed;
   top:100%;
@@ -131,10 +128,10 @@ html,body{
 }
 
 @keyframes float{
-  to{ transform:translateY(-120vh) rotate(360deg); }
+  to{transform:translateY(-120vh) rotate(360deg);}
 }
 
-/* FINAL */
+/* Final */
 .final{
   position:fixed;
   inset:0;
@@ -158,7 +155,7 @@ html,body{
 
 <div id="splash">
   <p class="texto-doce">Alanny Laryssa Ribeiro de Souza,<br>preparei algo especial para você...</p>
-  <button class="btn-play" onclick="comecar()">💙 Ver o nosso amor</button>
+  <button class="btn-play" id="btnStart">💙 Ver o nosso amor</button>
 </div>
 
 <div id="main">
@@ -185,29 +182,96 @@ html,body{
 <div id="timer">Calculando...</div>
 </div>
 
-<button id="btn-ask" onclick="mostrarPedido()">Tenho algo pra te perguntar...</button>
+<button id="btn-ask">Tenho algo pra te perguntar...</button>
 
 </div>
 
 <script>
-const audio=document.getElementById('musica');
-const splash=document.getElementById('splash');
-const main=document.getElementById('main');
-const dataInicio=new Date("2025-11-29T00:00:00");
+const audio = document.getElementById("musica");
+const splash = document.getElementById("splash");
+const main = document.getElementById("main");
+const dataInicio = new Date("2025-11-29T00:00:00");
 
-function comecar(){
+document.getElementById("btnStart").addEventListener("click", iniciar);
+document.getElementById("btn-ask").addEventListener("click", mostrarPedido);
+
+function iniciar(){
   audio.play().catch(()=>{});
-  splash.style.opacity=0;
+
+  splash.style.opacity = 0;
   setTimeout(()=>{
-    splash.style.display='none';
-    main.style.display='flex';
-    setTimeout(()=>main.style.opacity=1,50);
+    splash.style.display="none";
+    main.style.display="flex";
+    setTimeout(()=> main.style.opacity = 1, 50);
   },600);
 
+  updateTimer();
   setInterval(updateTimer,1000);
   setInterval(createHeart,300);
   setInterval(galleryRotate,3000);
 }
 
 function mostrarPedido(){
-  co
+  const tela = document.createElement("div");
+  tela.className="final";
+  tela.innerHTML=`
+  <h1 style="color:#87CEEB;font-size:2.4rem;">Alanny Laryssa 💙</h1>
+  <p style="max-width:340px;margin:15px 0;">
+  Desde o dia 29/11/2025, minha vida mudou completamente.
+  </p>
+  <p style="font-size:1.3rem;color:#87CEEB;font-weight:bold;">
+  Quer namorar comigo?
+  </p>
+  <div style="margin-top:20px;display:flex;gap:15px;">
+  <button onclick="aceitou()" style="padding:12px 32px;border:none;border-radius:30px;background:#87CEEB;color:#050505;font-weight:bold;">SIM 💙</button>
+  <button onclick="fugir(this)" style="padding:12px 32px;border:2px solid #87CEEB;border-radius:30px;background:none;color:#87CEEB;font-weight:bold;">NÃO 😳</button>
+  </div>`;
+  document.body.appendChild(tela);
+}
+
+function aceitou(){
+  document.body.innerHTML=`
+  <div class="final">
+  <h1 style="color:#87CEEB;font-size:2.8rem;">EU TE AMO 💙</h1>
+  <p style="max-width:340px;margin-top:15px;">
+  Obrigado por ser o melhor presente que a vida poderia me dar.
+  </p>
+  </div>`;
+}
+
+function fugir(btn){
+  btn.style.position="absolute";
+  btn.style.left=Math.random()*70+"%";
+  btn.style.top=Math.random()*70+"%";
+}
+
+function updateTimer(){
+  const diff=new Date()-dataInicio;
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor(diff/3600000%24);
+  const m=Math.floor(diff/60000%60);
+  const s=Math.floor(diff/1000%60);
+  document.getElementById("timer").innerText=`${d}d ${h}h ${m}m ${s}s`;
+}
+
+let idx=0;
+const imgs=document.querySelectorAll(".gallery img");
+function galleryRotate(){
+  imgs[idx].classList.remove("active");
+  idx=(idx+1)%imgs.length;
+  imgs[idx].classList.add("active");
+}
+
+function createHeart(){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💙";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=(Math.random()*15+10)+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
+}
+</script>
+
+</body>
+</html>
