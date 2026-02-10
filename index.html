@@ -7,39 +7,158 @@
 
 <style>
 :root { --blue:#87CEEB; --bg:#050505; }
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:white;font-family:'Segoe UI',sans-serif;overflow:hidden;height:100vh;display:flex;justify-content:center;align-items:center;}
 
-#splash{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:.8s;padding:20px;}
-.texto-doce{font-size:1.1rem;color:#ccc;margin-bottom:30px;letter-spacing:1px;font-weight:300;font-style:italic;text-align:center;line-height:1.5;}
-.btn-play{background:none;border:2px solid var(--blue);color:var(--blue);padding:15px 40px;font-size:1rem;border-radius:50px;cursor:pointer;font-weight:bold;box-shadow:0 0 15px rgba(135,206,235,.3);text-transform:uppercase;}
+* { margin:0; padding:0; box-sizing:border-box; }
 
-#main{display:none;flex-direction:column;align-items:center;opacity:0;transition:1s;width:100%;padding:20px;}
+html,body{
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  color:white;
+  font-family:'Segoe UI',sans-serif;
+  overflow-x:hidden;
+}
 
-.gallery{width:310px;height:410px;border-radius:20px;overflow:hidden;margin:15px 0;position:relative;border:1px solid rgba(135,206,235,.1);}
-.gallery img{width:100%;height:100%;object-fit:cover;position:absolute;opacity:0;transition:1s;}
-.gallery img.active{opacity:1;}
+.fullscreen{
+  min-height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-.info-box{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);padding:15px;border-radius:15px;width:310px;border:1px solid rgba(255,255,255,.1);margin-bottom:12px;text-align:center;}
-#timer{font-size:1.4rem;color:var(--blue);font-weight:bold;margin-top:5px;}
-.nome-ela{color:var(--blue);font-size:1.2rem;font-weight:bold;}
+/* SPLASH */
+#splash{
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  z-index:9999;
+  transition:.8s;
+}
 
-#btn-pegadinha{margin-top:15px;background:none;border:none;color:rgba(135,206,235,.5);font-size:12px;cursor:pointer;text-decoration:underline;font-style:italic;}
+.texto-doce{
+  font-size:clamp(1rem,4vw,1.2rem);
+  color:#ccc;
+  margin-bottom:30px;
+  font-style:italic;
+  line-height:1.5;
+}
 
-.heart{position:fixed;color:var(--blue);z-index:1;animation:float 4s linear infinite;top:100%;}
-@keyframes float{to{transform:translateY(-110vh) rotate(360deg);}}
+.btn-play{
+  background:none;
+  border:2px solid var(--blue);
+  color:var(--blue);
+  padding:14px 36px;
+  border-radius:50px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 15px rgba(135,206,235,.4);
+}
+
+/* MAIN */
+#main{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  padding:15px;
+  opacity:0;
+  transition:opacity 1s;
+}
+
+.info-box{
+  width:100%;
+  max-width:340px;
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(10px);
+  padding:15px;
+  border-radius:15px;
+  border:1px solid rgba(255,255,255,.1);
+  margin-bottom:12px;
+  text-align:center;
+}
+
+.nome-ela{ color:var(--blue); font-size:1.2rem; font-weight:bold; }
+
+#timer{ color:var(--blue); font-size:1.4rem; font-weight:bold; }
+
+.gallery{
+  width:100%;
+  max-width:340px;
+  height:430px;
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+  margin:15px 0;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(135,206,235,.1);
+}
+
+.gallery img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:1s;
+}
+
+.gallery img.active{ opacity:1; }
+
+#btn-ask{
+  margin-top:15px;
+  background:none;
+  border:1px solid var(--blue);
+  color:var(--blue);
+  padding:10px 22px;
+  border-radius:30px;
+  cursor:pointer;
+}
+
+/* HEARTS */
+.heart{
+  position:fixed;
+  top:100%;
+  color:var(--blue);
+  animation:float 4s linear infinite;
+  pointer-events:none;
+  z-index:1;
+}
+
+@keyframes float{
+  to{ transform:translateY(-120vh) rotate(360deg); }
+}
+
+/* FINAL */
+.final{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#050505,#0b1c2d,#0f4c81);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:25px;
+  z-index:99999;
+}
 </style>
 </head>
 
-<body>
+<body class="fullscreen">
 
 <audio id="musica" loop>
 <source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <div id="splash">
-<p class="texto-doce">Alanny Laryssa Ribeiro de Souza,<br>preparei algo especial para você...</p>
-<button class="btn-play" onclick="comecarSurpresa()">💙 Ver o nosso amor</button>
+  <p class="texto-doce">Alanny Laryssa Ribeiro de Souza,<br>preparei algo especial para você...</p>
+  <button class="btn-play" onclick="comecar()">💙 Ver o nosso amor</button>
 </div>
 
 <div id="main">
@@ -62,94 +181,33 @@ body{background:var(--bg);color:white;font-family:'Segoe UI',sans-serif;overflow
 </div>
 
 <div class="info-box">
-<p style="font-size:.9rem;">Cada segundo ao seu lado:</p>
+<p>Cada segundo ao seu lado:</p>
 <div id="timer">Calculando...</div>
 </div>
 
-<button id="btn-pegadinha" onclick="mostrarPedidoEspecial()">[ Tenho algo pra te perguntar... ]</button>
+<button id="btn-ask" onclick="mostrarPedido()">Tenho algo pra te perguntar...</button>
 
 </div>
 
 <script>
+const audio=document.getElementById('musica');
+const splash=document.getElementById('splash');
+const main=document.getElementById('main');
 const dataInicio=new Date("2025-11-29T00:00:00");
 
-function comecarSurpresa(){
-document.getElementById("musica").play().catch(()=>{});
-document.getElementById("splash").style.opacity=0;
-setTimeout(()=>{
-document.getElementById("splash").style.display="none";
-document.getElementById("main").style.display="flex";
-setTimeout(()=>document.getElementById("main").style.opacity=1,50);
-},600);
+function comecar(){
+  audio.play().catch(()=>{});
+  splash.style.opacity=0;
+  setTimeout(()=>{
+    splash.style.display='none';
+    main.style.display='flex';
+    setTimeout(()=>main.style.opacity=1,50);
+  },600);
 
-updateTimer();
-setInterval(updateTimer,1000);
-setInterval(createHeart,300);
-setInterval(galleryRotate,3000);
+  setInterval(updateTimer,1000);
+  setInterval(createHeart,300);
+  setInterval(galleryRotate,3000);
 }
 
-function mostrarPedidoEspecial(){
-const tela=document.createElement("div");
-tela.style.position="fixed";
-tela.style.inset="0";
-tela.style.background="linear-gradient(135deg,#050505,#0b1c2d)";
-tela.style.display="flex";
-tela.style.flexDirection="column";
-tela.style.justifyContent="center";
-tela.style.alignItems="center";
-tela.style.zIndex="99999";
-tela.innerHTML=`
-<h1 style="color:#87CEEB;font-size:2.4rem;">Alanny Laryssa 💙</h1>
-<p style="text-align:center;max-width:320px;">Desde o dia 29/11/2025, minha vida mudou completamente.</p>
-<p style="margin:15px 0;font-size:1.2rem;color:#87CEEB;font-weight:bold;">Quer namorar comigo?</p>
-<div style="display:flex;gap:15px;">
-<button onclick="aceitouPedido()" style="padding:12px 30px;border:none;border-radius:30px;background:#87CEEB;color:#050505;font-weight:bold;">SIM 💙</button>
-<button onclick="fugir(this)" style="padding:12px 30px;border:2px solid #87CEEB;border-radius:30px;background:none;color:#87CEEB;font-weight:bold;">NÃO 😳</button>
-</div>`;
-document.body.appendChild(tela);
-}
-
-function aceitouPedido(){
-document.body.innerHTML=`
-<div style="height:100vh;width:100vw;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(135deg,#050505,#0b1c2d);text-align:center;">
-<h1 style="color:#87CEEB;font-size:2.8rem;">EU TE AMO 💙</h1>
-<p style="max-width:320px;">Obrigado por ser o melhor presente que a vida poderia me dar.</p>
-</div>`;
-}
-
-function fugir(btn){
-btn.style.position="absolute";
-btn.style.left=Math.random()*70+"%";
-btn.style.top=Math.random()*70+"%";
-}
-
-function updateTimer(){
-const diff=new Date()-dataInicio;
-const d=Math.floor(diff/86400000);
-const h=Math.floor(diff/3600000%24);
-const m=Math.floor(diff/60000%60);
-const s=Math.floor(diff/1000%60);
-document.getElementById("timer").innerText=`${d}d ${h}h ${m}m ${s}s`;
-}
-
-let idx=0;
-const imgs=document.querySelectorAll(".gallery img");
-function galleryRotate(){
-imgs[idx].classList.remove("active");
-idx=(idx+1)%imgs.length;
-imgs[idx].classList.add("active");
-}
-
-function createHeart(){
-const h=document.createElement("div");
-h.className="heart";
-h.innerHTML="💙";
-h.style.left=Math.random()*100+"vw";
-h.style.fontSize=Math.random()*15+10+"px";
-document.body.appendChild(h);
-setTimeout(()=>h.remove(),4000);
-}
-</script>
-
-</body>
-</html>
+function mostrarPedido(){
+  co
