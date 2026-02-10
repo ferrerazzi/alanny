@@ -228,24 +228,32 @@ function mostrarPedido(){
 }
 
 function aceitou(){
-  audio.volume = 1;
-  audio.play().catch(()=>{});
-
   document.body.innerHTML = `
-  <div class="final">
-    <h1 style="color:#87CEEB;font-size:2.8rem;">EU TE AMO 💙</h1>
-    <p style="max-width:340px;margin-top:15px;">
-      Obrigado por ser o melhor presente que a vida poderia me dar.
-      Você é a minha razão e sempre será a maior motivação da minha vida.
-      Para sempre nós, minha princesa.
-    </p>
-  </div>
+    <div class="final">
+      <h1 style="color:#87CEEB;font-size:2.8rem;">EU TE AMO 💙</h1>
+      <p style="max-width:340px;margin-top:15px;">
+        Obrigado por ser o melhor presente que a vida poderia me dar.
+        Você é a minha razão e sempre será a maior motivação da minha vida.
+        Para sempre nós, minha princesa.
+      </p>
 
-  <audio autoplay loop>
-    <source src="musica.mp3" type="audio/mpeg">
-  </audio>
+      <audio id="musica" autoplay>
+        <source src="musica.mp3" type="audio/mpeg">
+      </audio>
+    </div>
   `;
+
+  const audio = document.getElementById("musica");
+  audio.volume = 1;
+
+  // garante autoplay mesmo em celular
+  audio.play().catch(() => {
+    document.body.addEventListener('click', () => {
+      audio.play();
+    }, { once: true });
+  });
 }
+
 
 
 function fugir(btn){
